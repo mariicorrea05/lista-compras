@@ -2,6 +2,15 @@ const lista = document.getElementById('minhaLista');
 const inputNovo = document.getElementById('novoItem'); 
 const botaoAdicionar = document.getElementById('adicionarItem'); 
 
+// Lista inicial de compras
+const listaInicial = [
+  { texto: 'Arroz', comprado: false },
+  { texto: 'Macarrão', comprado: false },
+  { texto: 'Tomate', comprado: false },
+  { texto: 'Salame', comprado: false },
+  { texto: 'Azeitona', comprado: false }
+];
+
 // Salvar lista no LocalStorage
 function salvarLista() {
   const itens = [];
@@ -29,15 +38,22 @@ function criarItem(texto, comprado = false) {
   return li;
 }
 
-// Carregar lista do LocalStorage
+// Carregar lista do LocalStorage ou lista inicial
 function carregarLista() {
   const dados = JSON.parse(localStorage.getItem('minhaLista'));
-  if (dados) {
-    lista.innerHTML = '';
+  lista.innerHTML = '';
+
+  if (dados && dados.length > 0) {
     dados.forEach(item => {
       const li = criarItem(item.texto, item.comprado);
       lista.appendChild(li);
     });
+  } else {
+    listaInicial.forEach(item => {
+      const li = criarItem(item.texto, item.comprado);
+      lista.appendChild(li);
+    });
+    salvarLista(); // Salva a lista inicial no LocalStorage
   }
 }
 
@@ -66,6 +82,4 @@ function atualizarLista(e) {
 }
 
 // Eventos
-window.addEventListener('load', carregarLista);
-lista.addEventListener('click', atualizarLista);
-botaoAdicionar.addEventListener('click', adicionarItem);
+window
